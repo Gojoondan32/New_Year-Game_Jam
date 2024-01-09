@@ -7,9 +7,9 @@ using UnityEngine.Video;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private float speed = 5f;
-    [SerializeField] private float rotationSpeed = 5f;
+    [SerializeField] private Rigidbody2D _rb;
+    [SerializeField] private float _speed = 5f;
+    [SerializeField] private float _rotationSpeed = 5f;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,24 +21,24 @@ public class Player : MonoBehaviour
     {
         Vector2 mousePositon = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //TestAngle(mousePositon);
-        Move(mousePositon);
-        Rotate(mousePositon);
+        if(Input.GetMouseButton(0)) Move(mousePositon);
+        //Rotate(mousePositon);
     }
 
     private void Move(Vector2 mousePositon){
         // 
-        if(Mathf.Abs(rb.position.x - mousePositon.x) < 0.1f && Mathf.Abs(rb.position.y - mousePositon.y) < 0.1f){
-            rb.velocity = Vector2.zero;
+        if(Mathf.Abs(_rb.position.x - mousePositon.x) < 0.1f && Mathf.Abs(_rb.position.y - mousePositon.y) < 0.1f){
+            _rb.velocity = Vector2.zero;
             return;
         }
         
-        rb.velocity = (mousePositon - rb.position).normalized * speed * Time.deltaTime;
+        _rb.velocity = (mousePositon - _rb.position).normalized * _speed * Time.deltaTime;
     }
     
     private void Rotate(Vector2 mousePosition){
-        Vector2 rotationDirection = mousePosition - rb.position;
+        Vector2 rotationDirection = mousePosition - _rb.position;
         float rotation = Mathf.Atan2(rotationDirection.y, rotationDirection.x) * Mathf.Rad2Deg - 90f;
-        rb.transform.eulerAngles = Vector3.forward * rotation;
+        _rb.transform.eulerAngles = Vector3.forward * rotation;
     }
 
     private void TestAngle(Vector2 mousePosition){
@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
         Debug.DrawRay(transform.position, mousePosition, Color.red); // The vector which points to the mouse position
         Debug.DrawRay(Vector2.zero, up, Color.blue); // Represents the up vector
 
-        float angle = Mathf.Atan2(mousePosition.y, mousePosition.x) - Mathf.Atan2(rb.position.y, rb.position.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(mousePosition.y, mousePosition.x) - Mathf.Atan2(_rb.position.y, _rb.position.x) * Mathf.Rad2Deg;
         if(angle < 0) angle += 360f;
         Debug.Log(angle);
     }
