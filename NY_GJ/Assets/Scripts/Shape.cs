@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Shape : MonoBehaviour
 {
-    private int _availableEdges = 4;
-    public int AvailableEdges { get { return _availableEdges; } private set { _availableEdges = value; } }
+    //private int _availableEdges = 4;
+    //public int AvailableEdges { get { return _availableEdges; } private set { _availableEdges = value; } }
 
     private Shape[] _connctedShapes = new Shape[4];
 
@@ -19,11 +19,16 @@ public class Shape : MonoBehaviour
     // We could have an event here which highlights the edges of the valid shapes
     public void ConnectShape(Shape shape, int index){
         _connctedShapes[index] = shape;
-        AvailableEdges--;
+        //AvailableEdges--;
     }
 
     public void DisconnectShape(int index){
         _connctedShapes[index] = null;
-        AvailableEdges++;
+        //AvailableEdges++;
+    }
+
+    public bool IsEdgeValid(int index){
+        if(_connctedShapes[index] == null) return true;
+        else return false;
     }
 }
