@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Shape_Builder : MonoBehaviour
 {
-    [SerializeField] private Shape _playerShape; //! This will need to change at runtime later
+    [SerializeField] private Transform player; //! This will need to change at runtime later
     [SerializeField] private Shape _shapeWaitingToConnect;
     private bool _connectingShape = false;
     // Start is called before the first frame update
@@ -75,7 +75,7 @@ public class Shape_Builder : MonoBehaviour
 
         if (y >= m1 * (x - line1Coord1.x) + line1Coord1.y && y >= m2 * (x - line2Coord1.x) + line2Coord1.y){
             Debug.Log("Point is in the first quadrant");
-            if(shapeToConnectTo.IsEdgeValid(0)){
+            if(shapeToConnectTo.IsEdgeValid(0) && IsSpace(IndexConverter(0).position, shapeToConnectTo, shapeWaitingToConnect)){
                 // We can connect the shape here
                 AttachShape(shapeWaitingToConnect, shapeToConnectTo, 0);
             }
@@ -83,21 +83,21 @@ public class Shape_Builder : MonoBehaviour
         }
         else if (y < m1 * (x - line1Coord1.x) + line1Coord1.y && y >= m2 * (x - line2Coord1.x) + line2Coord1.y){
             Debug.Log("Point is in the second quadrant");
-            if (shapeToConnectTo.IsEdgeValid(1)){
+            if (shapeToConnectTo.IsEdgeValid(1) && IsSpace(IndexConverter(1).position, shapeToConnectTo, shapeWaitingToConnect)){
                 // We can connect the shape here
                 AttachShape(shapeWaitingToConnect, shapeToConnectTo, 1);
             }
         }
         else if (y < m1 * (x - line1Coord1.x) + line1Coord1.y && y < m2 * (x - line2Coord1.x) + line2Coord1.y){
             Debug.Log("Point is in the third quadrant");
-            if (shapeToConnectTo.IsEdgeValid(2)){
+            if (shapeToConnectTo.IsEdgeValid(2) && IsSpace(IndexConverter(2).position, shapeToConnectTo, shapeWaitingToConnect)){
                 // We can connect the shape here
                 AttachShape(shapeWaitingToConnect, shapeToConnectTo, 2);
             }
         }
         else if (y >= m1 * (x - line1Coord1.x) + line1Coord1.y && y < m2 * (x - line2Coord1.x) + line2Coord1.y){
             Debug.Log("Point is in the fourth quadrant");
-            if (shapeToConnectTo.IsEdgeValid(3)){
+            if (shapeToConnectTo.IsEdgeValid(3) && IsSpace(IndexConverter(3).position, shapeToConnectTo, shapeWaitingToConnect)){
                 // We can connect the shape here
                 AttachShape(shapeWaitingToConnect, shapeToConnectTo, 3);
             }
@@ -111,12 +111,26 @@ public class Shape_Builder : MonoBehaviour
     private void AttachShape(Shape shapeWaitingToConnect, Shape shapeToConnectTo, int index){
         // We only need to call IndexConverter once this way
         (int index, Vector3 position) indexConverter = IndexConverter(index);
-        shapeWaitingToConnect.ConnectShape(shapeToConnectTo, indexConverter.index); 
+        
         shapeWaitingToConnect.transform.position = shapeToConnectTo.transform.position + indexConverter.position;
+        shapeWaitingToConnect.transform.parent = player.transform;
+        shapeWaitingToConnect.LookForAllEdges(indexConverter.index, shapeToConnectTo);
 
         shapeToConnectTo.ConnectShape(shapeWaitingToConnect, index);
         _connectingShape = false;
         _shapeWaitingToConnect = null;
+    }
+
+    private bool IsSpace(Vector2 positionToAddShape, Shape shapeToConnectTo, Shape shapeWaitingToConnect){
+        RaycastHit2D[] hits = Physics2D.RaycastAll(shapeToConnectTo.transform.position, positionToAddShape, 1f);
+        Debug.DrawRay(shapeToConnectTo.transform.position, positionToAddShape, Color.green, 1f);
+        
+        foreach(RaycastHit2D hit in hits){
+            if(hit.collider.GetComponent<Shape>() == shapeToConnectTo || 
+            hit.collider.GetComponent<Shape>() == shapeWaitingToConnect) continue; // Ignore the shape we are trying to connect to
+            else return false;
+        }
+        return true;
     }
 
     private (int index, Vector3 position) IndexConverter(int index){

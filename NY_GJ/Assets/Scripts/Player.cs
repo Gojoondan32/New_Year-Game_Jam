@@ -22,12 +22,13 @@ public class Player : MonoBehaviour
         Vector2 mousePositon = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //TestAngle(mousePositon);
         if(Input.GetMouseButton(0)) Move(mousePositon);
+        else _rb.velocity = Vector2.zero;
         //Rotate(mousePositon);
     }
 
     private void Move(Vector2 mousePositon){
         // 
-        if(Mathf.Abs(_rb.position.x - mousePositon.x) < 0.1f && Mathf.Abs(_rb.position.y - mousePositon.y) < 0.1f){
+        if(Mathf.Abs(_rb.position.x - mousePositon.x) < 0.01f && Mathf.Abs(_rb.position.y - mousePositon.y) < 0.01f){
             _rb.velocity = Vector2.zero;
             return;
         }
