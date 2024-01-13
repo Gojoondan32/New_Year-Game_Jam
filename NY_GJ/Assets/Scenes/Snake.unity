@@ -412,8 +412,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1768706610}
   - component: {fileID: 1768706609}
-  - component: {fileID: 1768706608}
   - component: {fileID: 1768706611}
+  - component: {fileID: 1768706608}
   m_Layer: 0
   m_Name: Snake_Head
   m_TagString: Untagged
@@ -456,6 +456,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rb: {fileID: 1768706608}
   _speed: 500
+  _nextPart: {fileID: 0}
 --- !u!4 &1768706610
 Transform:
   m_ObjectHideFlags: 0
@@ -485,6 +486,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e39497dd3f050e4ab82c303fbc07230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _snakeHead: {fileID: 1768706609}
+  _snakePartPrefab: {fileID: 5790444003380150603, guid: bac3fd1aba2178e4193a8e73ee5b0c81, type: 3}
 --- !u!1 &1800900424
 GameObject:
   m_ObjectHideFlags: 0

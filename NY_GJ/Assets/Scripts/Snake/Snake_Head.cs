@@ -2,26 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Snake_Head : MonoBehaviour
+public class Snake_Head : MonoBehaviour, ISnake
 {
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private float _speed;
-    //private List<Transform> _positions = new List<Transform>();
-    //public List<Transform> Positions {get => _positions; private set => _positions = value;}
-
-    private Snake_Part _nextPart = null;
+    [SerializeField] private Snake_Part _nextPart = null;
+    public Snake_Part NextPart { get => _nextPart; set => _nextPart = value; }
+    public Vector3 Position => transform.position;
+    public Quaternion Rotation => transform.rotation;
 
     void FixedUpdate()
     {
+        
         Vector2 mousePositon = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (Mathf.Abs(_rb.position.x - mousePositon.x) < 0.1f && Mathf.Abs(_rb.position.y - mousePositon.y) < 0.1f)
         {
             _rb.velocity = Vector2.zero;
             return;
         }
+        _nextPart?.Move(Position, Rotation); // Send over the old position to the next part
         Move(mousePositon);
         Rotate(mousePositon);
-        //_positions.Add(transform);
     }
 
     private void Move(Vector2 mousePositon){
