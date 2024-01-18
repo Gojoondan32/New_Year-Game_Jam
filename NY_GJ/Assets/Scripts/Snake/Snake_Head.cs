@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Snake_Head : MonoBehaviour, ISnake
@@ -20,6 +21,9 @@ public class Snake_Head : MonoBehaviour, ISnake
             _rb.velocity = Vector2.zero;
             return;
         }
+
+
+
         _nextPart?.Move(Position, transform.up, Rotation); // Send over the old position to the next part
         Move(mousePositon);
         Rotate(mousePositon);
@@ -27,6 +31,7 @@ public class Snake_Head : MonoBehaviour, ISnake
 
     private void Move(Vector2 mousePositon){
         _rb.velocity = (mousePositon - _rb.position).normalized * _speed * Time.deltaTime;
+        Snake_Generator.Instance.AddSnakePosition(transform.position, transform.rotation);
     }
 
     private void Rotate(Vector2 mousePositon){
