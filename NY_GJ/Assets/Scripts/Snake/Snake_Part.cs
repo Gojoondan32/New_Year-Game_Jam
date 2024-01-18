@@ -10,11 +10,11 @@ public class Snake_Part : MonoBehaviour, ISnake
     public Vector3 Position => transform.position;
     public Quaternion Rotation => transform.rotation;
 
-    public void Move(Vector3 nextPosition, Quaternion nextRotation)
+    public void Move(Vector3 nextPosition, Vector3 localUp, Quaternion nextRotation)
     {
-        _nextPart?.Move(Position, Rotation);
+        _nextPart?.Move(Position, transform.up, Rotation);
 
-        transform.position = nextPosition;
+        transform.position = nextPosition - localUp;
         transform.rotation = nextRotation;
     }
 }

@@ -20,7 +20,7 @@ public class Snake_Head : MonoBehaviour, ISnake
             _rb.velocity = Vector2.zero;
             return;
         }
-        _nextPart?.Move(Position, Rotation); // Send over the old position to the next part
+        _nextPart?.Move(Position, transform.up, Rotation); // Send over the old position to the next part
         Move(mousePositon);
         Rotate(mousePositon);
     }
