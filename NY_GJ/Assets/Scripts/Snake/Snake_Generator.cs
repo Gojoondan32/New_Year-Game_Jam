@@ -25,21 +25,14 @@ public class Snake_Generator : MonoBehaviour
         _snakePositions.rotations.Add(_snakeHead.Rotation); // Add the first rotation to the list
 
         _indexDelay = 0;
-    }
-
-    private void Start() {
         _previousPart = _snakeHead;
-        StartCoroutine(GenerateSnake());
     }
 
-    private IEnumerator GenerateSnake(){
-        while(true){
-            yield return new WaitForSeconds(5f);
-            Snake_Part newPart = Instantiate(_snakePartPrefab, _previousPart.Position, _previousPart.Rotation);
-            newPart.Init(_indexDelay += _indexDelayAmount); //! This number represents the spacing between the parts
-            _previousPart.NextPart = newPart;
-            _previousPart = newPart;
-        }
+    public void GenerateSnakePart(){
+        Snake_Part newPart = Instantiate(_snakePartPrefab, _previousPart.Position, _previousPart.Rotation);
+        newPart.Init(_indexDelay += _indexDelayAmount); 
+        _previousPart.NextPart = newPart;
+        _previousPart = newPart;
     }
 
     public void AddSnakePosition(Vector3 position, Quaternion rotation){
