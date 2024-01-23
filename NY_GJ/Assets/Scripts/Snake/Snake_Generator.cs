@@ -12,7 +12,8 @@ public class Snake_Generator : MonoBehaviour
     [SerializeField] private Snake_Part _snakePartPrefab;
     private (List<Vector3> positions, List<Quaternion> rotations) _snakePositions = (new List<Vector3>(), new List<Quaternion>());
     private ISnake _previousPart;
-    private int _indexDelay;
+    private int _indexDelay; // This represents the current spacing between the parts
+    private int _indexDelayAmount = 5; // This represents how much spacing should be between the parts 
     private void Awake()
     {
         if (Instance == null)
@@ -35,14 +36,20 @@ public class Snake_Generator : MonoBehaviour
         while(true){
             yield return new WaitForSeconds(5f);
             Snake_Part newPart = Instantiate(_snakePartPrefab, _previousPart.Position, _previousPart.Rotation);
-            newPart.Init(_indexDelay += 5); //! This number represents the spacing between the parts
+            newPart.Init(_indexDelay += _indexDelayAmount); //! This number represents the spacing between the parts
             _previousPart.NextPart = newPart;
             _previousPart = newPart;
         }
     }
 
     public void AddSnakePosition(Vector3 position, Quaternion rotation){
-        //! This needs some optimization because it is adding intinite positions to the list
+        // If the list is bigger than the index delay + the index delay amount, remove the first element to prevent the list from getting too big
+        if(_snakePositions.positions.Count >= _indexDelay + _indexDelayAmount + 1){
+            _snakePositions.positions.RemoveAt(0);
+            _snakePositions.rotations.RemoveAt(0);
+            Debug.Log("Snake positions" + _snakePositions.positions.Count);
+        }
+        Debug.Log("Index delay: " + _indexDelay);
         _snakePositions.positions.Add(position);
         _snakePositions.rotations.Add(rotation);
     }
