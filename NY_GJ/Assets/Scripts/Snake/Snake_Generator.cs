@@ -29,7 +29,10 @@ public class Snake_Generator : MonoBehaviour
     }
 
     public void GenerateSnakePart(){
-        Snake_Part newPart = Instantiate(_snakePartPrefab, _previousPart.Position, _previousPart.Rotation);
+        // Need to set the initial position of the parts to behind the previus part
+        (Vector3 position, Quaternion rotation) = GetSnakePositionAndRotation(_indexDelay + _indexDelayAmount);
+
+        Snake_Part newPart = Instantiate(_snakePartPrefab, position, rotation);
         newPart.Init(_indexDelay += _indexDelayAmount); 
         _previousPart.NextPart = newPart;
         _previousPart = newPart;
