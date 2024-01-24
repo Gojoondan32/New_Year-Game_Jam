@@ -40,4 +40,12 @@ public class Snake_Head : MonoBehaviour, ISnake
         _rb.rotation = angle;
     }
 
+    private void OnCollisionEnter2D(Collision2D other) {
+        if(other.gameObject.TryGetComponent<Snake_Part>(out _)){
+            // This is game over
+            Debug.Log("Game Over");
+            Time.timeScale = 0;
+        }
+    }
+
 }
