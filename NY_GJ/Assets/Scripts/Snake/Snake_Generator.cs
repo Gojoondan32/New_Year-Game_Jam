@@ -13,7 +13,7 @@ public class Snake_Generator : MonoBehaviour
     private (List<Vector3> positions, List<Quaternion> rotations) _snakePositions = (new List<Vector3>(), new List<Quaternion>());
     private ISnake _previousPart;
     private int _indexDelay; // This represents the current spacing between the parts
-    private int _indexDelayAmount = 5; // This represents how much spacing should be between the parts 
+    private int _indexDelayAmount = 4; // This represents how much spacing should be between the parts 
     private void Awake()
     {
         if (Instance == null)
