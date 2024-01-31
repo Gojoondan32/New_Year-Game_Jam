@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class Snake_Head : MonoBehaviour, ISnake
 {
@@ -18,26 +19,31 @@ public class Snake_Head : MonoBehaviour, ISnake
         Vector2 mousePositon = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (Mathf.Abs(_rb.position.x - mousePositon.x) < 0.1f && Mathf.Abs(_rb.position.y - mousePositon.y) < 0.1f)
         {
-            _rb.velocity = Vector2.zero;
-            return;
+            //_rb.velocity = Vector2.zero;
+            //return;
         }
 
 
 
         _nextPart?.Move(Position, transform.up, Rotation); // Send over the old position to the next part
-        Move(mousePositon);
-        Rotate(mousePositon);
+        //Move(mousePositon);
+        //Rotate(mousePositon);
     }
 
     private void Move(Vector2 mousePositon){
-        _rb.velocity = (mousePositon - _rb.position).normalized * _speed * Time.deltaTime;
+        //_rb.velocity = (mousePositon - _rb.position).normalized * _speed * Time.deltaTime;
+        //_rb.velocity = transform.up * _speed * Time.deltaTime;
         Snake_Generator.Instance.AddSnakePosition(transform.position, transform.rotation);
+    }
+
+    private void Update() {
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(180, Vector3.forward), 10f * Time.deltaTime);
     }
 
     private void Rotate(Vector2 mousePositon){
         Vector2 direction = (mousePositon - _rb.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-        _rb.rotation = angle;
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(180, Vector3.forward), 10f * Time.deltaTime);
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
