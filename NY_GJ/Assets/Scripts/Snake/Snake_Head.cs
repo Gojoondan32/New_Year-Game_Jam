@@ -17,7 +17,9 @@ public class Snake_Head : MonoBehaviour, ISnake
 
     void FixedUpdate()
     {
-        
+        //if(Game_State_Manager.Instance.CurrentGameState != GameState.InGame) return;
+
+
         Vector2 mousePositon = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (Mathf.Abs(_rb.position.x - mousePositon.x) < 0.1f && Mathf.Abs(_rb.position.y - mousePositon.y) < 0.1f)
         {
@@ -43,11 +45,12 @@ public class Snake_Head : MonoBehaviour, ISnake
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.forward, direction), _rotationSpeed * Time.deltaTime);
     }
 
-    private void OnCollisionEnter2D(Collision2D other) {
+
+    private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.TryGetComponent<Snake_Part>(out _)){
             // This is game over
             Debug.Log("Game Over");
-            //Time.timeScale = 0;
+            Time.timeScale = 0;
         }
     }
 
