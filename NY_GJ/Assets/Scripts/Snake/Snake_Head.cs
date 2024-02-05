@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -8,7 +9,8 @@ public class Snake_Head : MonoBehaviour, ISnake
 {
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private float _speed;
-    [SerializeField] private Snake_Part _nextPart = null;
+    [SerializeField] private float _rotationSpeed;
+    private Snake_Part _nextPart = null;
     public Snake_Part NextPart { get => _nextPart; set => _nextPart = value; }
     public Vector3 Position => transform.position;
     public Quaternion Rotation => transform.rotation;
@@ -26,31 +28,26 @@ public class Snake_Head : MonoBehaviour, ISnake
 
 
         _nextPart?.Move(Position, transform.up, Rotation); // Send over the old position to the next part
-        //Move(mousePositon);
-        //Rotate(mousePositon);
+        Move(mousePositon);
+        Rotate(mousePositon);
     }
 
     private void Move(Vector2 mousePositon){
         //_rb.velocity = (mousePositon - _rb.position).normalized * _speed * Time.deltaTime;
-        //_rb.velocity = transform.up * _speed * Time.deltaTime;
+        _rb.velocity = transform.up * _speed * Time.deltaTime;
         Snake_Generator.Instance.AddSnakePosition(transform.position, transform.rotation);
-    }
-
-    private void Update() {
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(180, Vector3.forward), 10f * Time.deltaTime);
     }
 
     private void Rotate(Vector2 mousePositon){
         Vector2 direction = (mousePositon - _rb.position).normalized;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.AngleAxis(180, Vector3.forward), 10f * Time.deltaTime);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.forward, direction), _rotationSpeed * Time.deltaTime);
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
         if(other.gameObject.TryGetComponent<Snake_Part>(out _)){
             // This is game over
             Debug.Log("Game Over");
-            Time.timeScale = 0;
+            //Time.timeScale = 0;
         }
     }
 

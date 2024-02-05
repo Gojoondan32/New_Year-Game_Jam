@@ -33,7 +33,7 @@ public class UI_Manager : MonoBehaviour
     }
 
     #region Handle Score
-    public void AddScore(int score) => _scoreHandler.AddScore(score);
+    public void AddScore(int score) => _scoreHandler?.AddScore(score);
     public int GetScore() => _scoreHandler.Score;
     #endregion
 }
