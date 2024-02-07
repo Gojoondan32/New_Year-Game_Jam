@@ -12,6 +12,7 @@ public class Game_Manager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
         
+        Game_State_Manager.Instance.SetGameState(GameState.MainMenu);
     }
 
 }

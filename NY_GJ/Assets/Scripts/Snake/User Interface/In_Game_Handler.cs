@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class Score_Handler : MonoBehaviour
+public class In_Game_Handler : MonoBehaviour
 {
     private int _score;
     public int Score { get { return _score; }}

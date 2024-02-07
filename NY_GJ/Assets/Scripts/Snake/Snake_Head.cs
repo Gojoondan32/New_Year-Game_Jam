@@ -17,7 +17,7 @@ public class Snake_Head : MonoBehaviour, ISnake
 
     void FixedUpdate()
     {
-        //if(Game_State_Manager.Instance.CurrentGameState != GameState.InGame) return;
+        if(Game_State_Manager.Instance.CurrentGameState != GameState.InGame) return;
 
 
         Vector2 mousePositon = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -50,7 +50,7 @@ public class Snake_Head : MonoBehaviour, ISnake
         if(other.gameObject.TryGetComponent<Snake_Part>(out _)){
             // This is game over
             Debug.Log("Game Over");
-            Time.timeScale = 0;
+            Game_State_Manager.Instance.SetGameState(GameState.GameOver);
         }
     }
 
