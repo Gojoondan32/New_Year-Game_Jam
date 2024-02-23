@@ -30,11 +30,11 @@ public class Snake_Head : MonoBehaviour, ISnake
 
 
         _nextPart?.Move(Position, transform.up, Rotation); // Send over the old position to the next part
-        Move(mousePositon);
+        Move();
         Rotate(mousePositon);
     }
 
-    private void Move(Vector2 mousePositon){
+    private void Move(){
         //_rb.velocity = (mousePositon - _rb.position).normalized * _speed * Time.deltaTime;
         _rb.velocity = transform.up * _speed * Time.deltaTime;
         Snake_Generator.Instance.AddSnakePosition(transform.position, transform.rotation);

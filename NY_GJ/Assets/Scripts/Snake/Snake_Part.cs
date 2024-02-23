@@ -19,8 +19,8 @@ public class Snake_Part : MonoBehaviour, ISnake
         _nextPart?.Move(Position, transform.up, Rotation);
 
 
-        (Vector3 position, Quaternion rotation) = Snake_Generator.Instance.GetSnakePositionAndRotation(_indexDelay);
-        transform.position = position;
-        transform.rotation = rotation;
+        Snake_Data snake_Data = Snake_Generator.Instance.GetSnakePositionAndRotation(_indexDelay);
+        transform.position = snake_Data.Position;
+        transform.rotation = snake_Data.Rotation;
     }
 }
