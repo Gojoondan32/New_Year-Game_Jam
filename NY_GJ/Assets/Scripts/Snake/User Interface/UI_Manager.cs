@@ -21,6 +21,7 @@ public class UI_Manager : MonoBehaviour
         Game_State_Manager.Instance.OnGameStateChange += HandleGameStateChange;
     }
 
+
     private void HandleGameStateChange(GameState gameState) {
         switch (gameState) {
             case GameState.Default:

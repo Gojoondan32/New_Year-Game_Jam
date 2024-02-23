@@ -11,6 +11,7 @@ public class Snake_Generator : MonoBehaviour
     [SerializeField] private Snake_Head _snakeHead;
     [SerializeField] private Snake_Part _snakePartPrefab;
     private List<Snake_Data> _snakeData = new List<Snake_Data>();
+    private List<GameObject> _snakeParts = new List<GameObject>();
     private ISnake _previousPart; // This is an interface so that the head and the parts can be used interchangeably even though the are different classes
     private int _indexDelay; // This represents the current spacing between the parts
     private const int INDEX_DELAY_AMOUNT = 5; // This represents how much spacing should be between the parts 
@@ -20,11 +21,19 @@ public class Snake_Generator : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-        
+
+        Game_State_Manager.Instance.OnGameStateChange += HandleGameStateChange;
+    }
+
+    // Used for resetting the game
+    private void HandleGameStateChange(GameState gameState){
+        if(gameState != GameState.MainMenu) return;
+
         _snakeData.Add(new Snake_Data(_snakeHead.Position, _snakeHead.Rotation));
 
         _indexDelay = 0;
         _previousPart = _snakeHead;
+        DestroySnakeParts();
     }
 
     public void GenerateSnakePart(){
@@ -32,6 +41,7 @@ public class Snake_Generator : MonoBehaviour
         Snake_Data snake_Data = GetSnakePositionAndRotation(_indexDelay + INDEX_DELAY_AMOUNT);
 
         Snake_Part newPart = Instantiate(_snakePartPrefab, snake_Data.Position, snake_Data.Rotation);
+        _snakeParts.Add(newPart.gameObject); // This is used to keep track of all the parts so that they can be destroyed when the game is reset
         newPart.Init(_indexDelay += INDEX_DELAY_AMOUNT); 
         _previousPart.NextPart = newPart;
         _previousPart = newPart;
@@ -57,5 +67,11 @@ public class Snake_Generator : MonoBehaviour
 
         // The ^ operator is the same as writing _snakeData.Count - 1
         return _snakeData[^(1 + indexDelay)];
+    }
+
+    private void DestroySnakeParts(){
+        foreach (var part in _snakeParts) Destroy(part);
+
+        _snakeParts.Clear();
     }
 }
