@@ -52,7 +52,7 @@ public class Snake_Generator : MonoBehaviour
         if(_snakeData.Count - (1 + indexDelay) < 0){
             // The list is currently not big enugh to get the position for this part with the correct spacing
             // Add the index delay amount to the index delay to get the position of the previous part
-            return _snakeData[_snakeData.Count - 1 - (indexDelay + INDEX_DELAY_AMOUNT)];
+            return _snakeData[^(1 + (indexDelay - INDEX_DELAY_AMOUNT))];
         }
 
         // The ^ operator is the same as writing _snakeData.Count - 1
